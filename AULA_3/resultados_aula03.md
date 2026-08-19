@@ -125,3 +125,24 @@ TAXA_MUTACAO = 0.1
 
 se tem como entendido que, de geracao em geracao, dependendo das variveis colocadas, a solucao otima ou heuristca podem ser encontradas mais rapidamente.
 e como eu perguntei durante a aula, a quantidade de taxa de mutacao tem que ser baixa e a 
+
+
+RESULTADOS LAB2:
+
+==================================================
+ONEMAX - AG com 10 indivíduos, 100 gerações
+==================================================
+Geração   0: Melhor = 13/20, Média = 9.70
+Geração  10: Melhor = 18/20, Média = 16.10
+Geração  20: Melhor = 19/20, Média = 16.80
+Geração  30: Melhor = 16/20, Média = 14.60
+Geração  40: Melhor = 18/20, Média = 14.40
+Geração  50: Melhor = 16/20, Média = 14.90
+Geração  60: Melhor = 18/20, Média = 15.00
+Geração  70: Melhor = 18/20, Média = 15.80
+Geração  80: Melhor = 16/20, Média = 14.30
+Geração  90: Melhor = 17/20, Média = 14.40
+
+ MELHOR FITNESS: 17/20
+   Ótimo = 20 (todos os bits são 1)
+
