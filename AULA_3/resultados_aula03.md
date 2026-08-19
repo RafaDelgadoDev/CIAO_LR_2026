@@ -146,3 +146,13 @@ Geração  90: Melhor = 17/20, Média = 14.40
  MELHOR FITNESS: 17/20
    Ótimo = 20 (todos os bits são 1)
 
+lab_02 explicacoes
+
+explicacao:  " 
+question N-1: the answer for the question is the following, at the moment that we raise the mutation probability, the amount of likely improvment, is instantly deleted
+
+question N-2: " when the population is lowered, the amount of "chances" and tries are basically arriving to a low quality, making the code not having a good status
+
+question N-3: "when we raise the number of generations, we are basically incresing the quantity of "varieties" and the good binaries be kept (of course, if the elite number had kept the same, 2)
+
+question N-4: "when we changed the elite to 0, we are saying to the code that we can't stay with the same genetics that were before discovered, neither to know about earlier generations
