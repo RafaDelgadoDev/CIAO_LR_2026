@@ -32,5 +32,5 @@ PASSO 4: Execução do zero
 LAB3_AULA2
 # 19. Codigo completo (com a funcao calcular_gap inovadora e o loop funcionando). - / Arquivo .ipynb no repositório
 # 20. Valor do gap médio obtido. - Gap médio: 0.39%
-# 21. Resposta: "A heuristica gulosa e boa o suficiente para este problema? Em quais situacoes voce usaria ela e em quais preferiria gastar mais tempo para achar o otimo?" - Levando em consideração que os resultados obtidos são mínimos em todos os casos, consideramos a Heuristica boa para o problema. 
+# 21. Resposta: "A heuristica gulosa e boa o suficiente para este problema? Em quais situacoes voce usaria ela e em quais preferiria gastar mais tempo para achar o otimo?" - Levando em consideração que os resultados obtidos são mínimos em todos os casos, consideramos a Heuristica boa para o problema. O problema poderia ser replicado em situações como: viagens de barco com limite de pessoas e uma qujantidade elevada de pessoas para transpostar por exemplo e esse já é um otimo exemplo de situação em que seria de extrema importancia gastar mais tempo para achar o "ótimo"
 
