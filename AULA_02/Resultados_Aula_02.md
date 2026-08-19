@@ -28,3 +28,9 @@ PASSO 3: Execução código semi-pronto
 
 PASSO 4: Execução do zero
 
+
+LAB3_AULA2
+# 19. Codigo completo (com a funcao calcular_gap inovadora e o loop funcionando). - / Arquivo .ipynb no repositório
+# 20. Valor do gap médio obtido. - Gap médio: 0.39%
+# 21. Resposta: "A heuristica gulosa e boa o suficiente para este problema? Em quais situacoes voce usaria ela e em quais preferiria gastar mais tempo para achar o otimo?" - Levando em consideração que os resultados obtidos são mínimos em todos os casos, consideramos a Heuristica boa para o problema. 
+
