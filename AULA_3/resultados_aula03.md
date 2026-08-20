@@ -156,3 +156,21 @@ question N-2: " when the population is lowered, the amount of "chances" and trie
 question N-3: "when we raise the number of generations, we are basically incresing the quantity of "varieties" and the good binaries be kept (of course, if the elite number had kept the same, 2)
 
 question N-4: "when we changed the elite to 0, we are saying to the code that we can't stay with the same genetics that were before discovered, neither to know about earlier generations
+
+considerações:
+
+Analisando os dois códigos, entendemos que:
+Configuração 1 (pop=30, ger=50, mut=0.02, elite=2) convergiu rápido e ficou estável
+Chegou no ótimo (20/20) já na geração 10 e se manteve lá até o fim. Isso mostra uma combinação "equilibrada": população grande o suficiente pra manter diversidade genética, mutação baixa o suficiente pra não destruir bons indivíduos, e elitismo garantindo que o melhor encontrado nunca se perde de uma geração pra outra.
+
+Configuração 2 (pop=10, ger=100, mut=0.1, elite=0), nunca convergiu, mesmo com o dobro de gerações
+Aqui o melhor fitness fica oscilando (14 → 17 → 18 → 16 → 19 → 15...) e termina em 15/20, pior que o pico de 19/20 lá na geração 70. Ou seja: o algoritmo achou uma solução quase ótima e depois a perdeu. Isso só é possível porque ELITE=0 — sem elitismo, não existe garantia de que o melhor indivíduo sobreviva à próxima geração; ele pode ser destruído por crossover/mutação e nunca mais reaparecer.
+
+Por que isso aconteceu, parâmetro por parâmetro:
+
+População pequena (10): pouca diversidade genética disponível pro torneio de seleção escolher bons pais; o "pool genético" é raso.
+Mutação alta (0.1 vs 0.02): com 20 bits, uma taxa de 10% significa em média 2 bits mutando por indivíduo a cada geração, isso é ruído demais perto do ótimo, os bits corretos ficam sendo "desfeitos" quase tão rápido quanto são encontrados.
+Elite=0: essa é provavelmente a causa mais decisiva da instabilidade. Sem preservar o melhor indivíduo, o algoritmo não tem "memória" do progresso, cada geração começa do zero em termos de garantia.
+Mais gerações (100 vs 50) não compensou nada disso: rodar o dobro de tempo com parâmetros ruins não substitui parâmetros bem ajustados. Quantidade de iterações ≠ qualidade da busca.
+
+Conclusão geral (juntando com o AG anterior, do f(x)=x²): os dois experimentos reforçam que um Algoritmo Genético é, no fim das contas, um equilíbrio entre exploração (mutação, diversidade populacional, testar coisas novas) e exploração do que já funciona (elitismo, seleção proporcional ao fitness, não perder o que é bom). A Configuração 1 pende pro lado da exploitation e converge rápido; a Configuração 2 exagera na exploration a ponto de o algoritmo "esquecer" boas soluções que já tinha achado. Isso é uma ilustração bem prática de um dos dilemas centrais de computação evolutiva: mutação e diversidade são necessárias pra não ficar preso em ótimo local, mas em excesso e sem elitismo pra ancorar o progresso elas impedem a convergência.
