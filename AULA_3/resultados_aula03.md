@@ -174,3 +174,22 @@ Elite=0: essa é provavelmente a causa mais decisiva da instabilidade. Sem prese
 Mais gerações (100 vs 50) não compensou nada disso: rodar o dobro de tempo com parâmetros ruins não substitui parâmetros bem ajustados. Quantidade de iterações ≠ qualidade da busca.
 
 Conclusão geral (juntando com o AG anterior, do f(x)=x²): os dois experimentos reforçam que um Algoritmo Genético é, no fim das contas, um equilíbrio entre exploração (mutação, diversidade populacional, testar coisas novas) e exploração do que já funciona (elitismo, seleção proporcional ao fitness, não perder o que é bom). A Configuração 1 pende pro lado da exploitation e converge rápido; a Configuração 2 exagera na exploration a ponto de o algoritmo "esquecer" boas soluções que já tinha achado. Isso é uma ilustração bem prática de um dos dilemas centrais de computação evolutiva: mutação e diversidade são necessárias pra não ficar preso em ótimo local, mas em excesso e sem elitismo pra ancorar o progresso elas impedem a convergência.
+
+
+LAB3:
+
+Resultados: ==================================================
+OTIMIZANDO f(x) = x * sin(3x)
+==================================================
+Geração   0: Melhor f(x) = 6.0863 (x = 6.6667)
+Geração  10: Melhor f(x) = 8.9019 (x = 8.9020)
+Geração  20: Melhor f(x) = 8.9019 (x = 8.9020)
+Geração  30: Melhor f(x) = 8.9019 (x = 8.9020)
+Geração  40: Melhor f(x) = 8.9019 (x = 8.9020)
+
+Considerações:
+
+Convergência rápida e "travada": o AG achou x ≈ 8,90 (f(x) ≈ 8,90) já na geração 10 e ficou parado ali até a geração 50. Isso indica que o algoritmo caiu num ótimo local forte e não teve estímulo suficiente pra escapar com TAXA_MUT = 0.05 e apenas 8 bits de resolução, depois que a população converge, fica difícil "pular" pra outro pico da função sem uma mutação mais agressiva ou reinício de diversidade.
+Resolução dos 8 bits limita a precisão: com 256 valores possíveis discretizando o intervalo [0,10], o "grão" mínimo de x é de ~0,039. Isso é suficiente pra achar um bom pico, mas não garante achar o x exato que maximiza a função é uma limitação da própria representação binária, não do algoritmo em si.
+A função tem múltiplos ótimos locais (por ser x·sin(3x), oscila bastante), e não temos garantia de que 8,90 é o máximo global do intervalo só sabemos que é o melhor que essa população específica encontrou. Seria interessante rodar com seeds diferentes pra ver se o AG converge sempre pro mesmo pico ou se varia.
+O deslocamento do fitness (+10) foi necessário, mas é um detalhe de implementação que merece nota no relatório: como a função original tem valores negativos, a seleção por roleta (que soma fitnesses diretamente) exigiu esse ajuste. É um lembrete prático de que a escolha do método de seleção impõe restrições sobre como modelar o fitness com seleção por torneio, por exemplo, esse deslocamento nem seria necessário.
