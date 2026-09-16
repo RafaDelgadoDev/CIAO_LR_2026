@@ -1,0 +1,12 @@
+Lab1
+Questão 1 — Como a busca local 2-opt afeta o equilíbrio entre Exploration e Exploitation?
+
+A busca local 2-opt desloca fortemente o equilíbrio na direção da exploitation (refino/intensificação). O papel do ACO puro é fazer a exploration: cada formiga escolhe o próximo nó probabilisticamente, guiada por feromônio (tau) e heurística (eta), o que naturalmente gera caminhos diferentes e varre o espaço de busca. Só que, antes de qualquer caminho ser usado pra depositar feromônio, o 2-opt entra e refina esse caminho até um ótimo local determinístico (troca segmentos enquanto houver melhora). Isso tem duas consequências:
+Reduz a variância entre as formigas: mesmo que elas tenham escolhido rotas iniciais bem diferentes (exploration alta), depois do 2-opt várias delas convergem pro mesmo ótimo local ou pra ótimos muito próximos — a diversidade que a exploration gerou é "achatada" pela exploitation do refino local.
+Acelera a convergência (às vezes rápido demais): no nosso caso, o algoritmo já achou o ótimo global (custo 70, confirmado por força bruta) na primeira iteração, e a curva de convergência fica praticamente reta/plana da iteração 0 até a 49. Isso é o sintoma clássico de um ACO onde a exploitation domina: o 2-opt "resgata" qualquer caminho ruim gerado pela parte estocástica, então o feromônio mal precisa "aprender" — o sistema já está perto do ótimo desde o início.
+
+Em grafos maiores/mais complexos, esse mesmo mecanismo ajudaria a evitar que o ACO fique preso em caminhos ruins por falta de refino, mas também traz risco de convergência prematura: se o 2-opt empurra todas as formigas pro mesmo ótimo local cedo demais, o algoritmo perde a chance de explorar outras regiões do espaço de busca que poderiam levar a um ótimo melhor (perde exploration global em troca de exploitation local).
+
+Questão 2 — O que aconteceria com rho = 0,0 (sem evaporação)?
+
+Rodei essa variação e o efeito é claro: o feromônio nunca é "esquecido", só acumula. Sem a linha pheromone *= (1 - rho) fazer efeito (com rho=0 ela vira um no-op), o feromônio das arestas boas cresce monotonicamente a cada iteração — no teste, o valor máximo de feromônio foi de ~1.1 na iteração 0 até quase 6.0 na iteração 49, crescendo de forma praticamente linear e sem limite superior.
