@@ -1,12 +1,65 @@
 Lab1
 Questão 1 — Como a busca local 2-opt afeta o equilíbrio entre Exploration e Exploitation?
 
-A busca local 2-opt desloca fortemente o equilíbrio na direção da exploitation (refino/intensificação). O papel do ACO puro é fazer a exploration: cada formiga escolhe o próximo nó probabilisticamente, guiada por feromônio (tau) e heurística (eta), o que naturalmente gera caminhos diferentes e varre o espaço de busca. Só que, antes de qualquer caminho ser usado pra depositar feromônio, o 2-opt entra e refina esse caminho até um ótimo local determinístico (troca segmentos enquanto houver melhora). Isso tem duas consequências:
-Reduz a variância entre as formigas: mesmo que elas tenham escolhido rotas iniciais bem diferentes (exploration alta), depois do 2-opt várias delas convergem pro mesmo ótimo local ou pra ótimos muito próximos — a diversidade que a exploration gerou é "achatada" pela exploitation do refino local.
-Acelera a convergência (às vezes rápido demais): no nosso caso, o algoritmo já achou o ótimo global (custo 70, confirmado por força bruta) na primeira iteração, e a curva de convergência fica praticamente reta/plana da iteração 0 até a 49. Isso é o sintoma clássico de um ACO onde a exploitation domina: o 2-opt "resgata" qualquer caminho ruim gerado pela parte estocástica, então o feromônio mal precisa "aprender" — o sistema já está perto do ótimo desde o início.
+A busca local 2-opt desloca fortemente o equilíbrio na direção da exploitation (refino/intensificação). 
+O papel do ACO puro é fazer a exploration: cada formiga escolhe o próximo nó probabilisticamente, guiada por feromônio (tau) e heurística (eta), o que naturalmente gera caminhos diferentes e varre o espaço de busca.
+Só que, antes de qualquer caminho ser usado pra depositar feromônio, o 2-opt entra e refina esse caminho até um ótimo local determinístico (troca segmentos enquanto houver melhora). Isso tem duas consequências:
+Reduz a variância entre as formigas: mesmo que elas tenham escolhido rotas iniciais bem diferentes (exploration alta), depois do 2-opt várias delas convergem pro mesmo ótimo local ou pra ótimos muito próximos,
+a diversidade que a exploration gerou é "achatada" pela exploitation do refino local.
+Acelera a convergência (às vezes rápido demais):
+no nosso caso, o algoritmo já achou o ótimo global (custo 70, confirmado por força bruta) na primeira iteração, e a curva de convergência fica praticamente reta/plana da iteração 0 até a 49. 
+Isso é o sintoma clássico de um ACO onde a exploitation domina: o 2-opt "resgata" qualquer caminho ruim gerado pela parte estocástica, então o feromônio mal precisa "aprender",
+o sistema já está perto do ótimo desde o início.
 
-Em grafos maiores/mais complexos, esse mesmo mecanismo ajudaria a evitar que o ACO fique preso em caminhos ruins por falta de refino, mas também traz risco de convergência prematura: se o 2-opt empurra todas as formigas pro mesmo ótimo local cedo demais, o algoritmo perde a chance de explorar outras regiões do espaço de busca que poderiam levar a um ótimo melhor (perde exploration global em troca de exploitation local).
+Em grafos maiores/mais complexos, esse mesmo mecanismo ajudaria a evitar que o ACO fique preso em caminhos ruins por falta de refino, mas também traz risco de convergência prematura:
+se o 2-opt empurra todas as formigas pro mesmo ótimo local cedo demais,
+o algoritmo perde a chance de explorar outras regiões do espaço de busca que poderiam levar a um ótimo melhor (perde exploration global em troca de exploitation local).
 
 Questão 2 — O que aconteceria com rho = 0,0 (sem evaporação)?
 
-Rodei essa variação e o efeito é claro: o feromônio nunca é "esquecido", só acumula. Sem a linha pheromone *= (1 - rho) fazer efeito (com rho=0 ela vira um no-op), o feromônio das arestas boas cresce monotonicamente a cada iteração — no teste, o valor máximo de feromônio foi de ~1.1 na iteração 0 até quase 6.0 na iteração 49, crescendo de forma praticamente linear e sem limite superior.
+Rodei essa variação e o efeito é claro: o feromônio nunca é "esquecido", só acumula. Sem a linha pheromone *= (1 - rho) fazer efeito (com rho=0 ela vira um no-op),
+o feromônio das arestas boas cresce monotonicamente a cada iteração — no teste, o valor máximo de feromônio foi de ~1.1 na iteração 0 até quase 6.0 na iteração 49,
+crescendo de forma praticamente linear e sem limite superior.
+
+Lab2
+
+Geração  0 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
+Geração  1 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
+Geração  2 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
+Geração  3 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
+Geração  4 | Melhor fitness: 14 | Indivíduo: [0 1 0 1 1]
+Geração  5 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
+Geração  6 | Melhor fitness: 14 | Indivíduo: [0 1 0 1 1]
+Geração  7 | Melhor fitness: 14 | Indivíduo: [0 1 0 1 1]
+Geração  8 | Melhor fitness: 14 | Indivíduo: [0 1 0 1 1]
+Geração  9 | Melhor fitness: 14 | Indivíduo: [0 1 0 1 1]
+
+[LAB 02] MELHOR SOLUÇÃO FINAL
+Indivíduo: [0 1 0 1 1]
+Fitness (valor): 14
+Peso usado: 7 / 15
+
+Questão 1 — Papel da Mutação e efeito de taxa 100%
+
+A mutação é o operador que introduz variação genética nova na população que não existe em nenhum dos pais,
+diferente do crossover, que só recombina material genético já presente. O papel dela é duplo:
+
+Evitar convergência prematura / escapar de ótimos locais: sem mutação, depois de algumas gerações a população tende a ficar geneticamente homogênea (todo mundo parecido com os melhores indivíduos atuais),
+e o crossover sozinho não consegue gerar combinações realmente novas — ele só embaralha o que já existe. A mutação garante que bits "perdidos" (que nenhum indivíduo da população tem mais) possam reaparecer.
+Manter diversidade: com uma taxa baixa (ex.: 10%, como no LAB 02 original), a mutação faz pequenos ajustes pontuais, funcionando como um "refino aleatório" que complementa a busca guiada da seleção + crossover.
+
+Com mutation_rate = 100%, todo bit de todo filho é invertido, sempre. Isso destrói completamente a lógica evolutiva do algoritmo: o filho não é mais uma combinação/variação levemente ajustada dos pais bons,
+ele vira essencialmente o complemento binário do resultado do crossover, algo praticamente desconectado da genética dos pais selecionados. 
+Rodamos esse cenário aqui e o resultado confirma: o melhor fitness fica oscilando de forma errática entre gerações (13 → 8 → 15 → 6 → 14 → 6 → 13 → 6...) sem nenhuma tendência de melhora,
+o AG deixa de ser uma busca guiada e vira, na prática, busca aleatória pura, porque a seleção por torneio escolhe bons pais, mas a mutação em 100% apaga completamente essa informação antes do filho nascer.
+
+Questão 2 — Por que a penalização (fitness = 0) é fundamental para convergência das restrições?
+
+Porque a seleção por torneio funciona comparando fitness, e é assim que o AG "aprende" o que é uma boa solução. Se um indivíduo que estoura o peso máximo recebesse o próprio total_value como fitness (sem penalização),
+ele poderia ter um valor maior que soluções válidas — afinal, sem a restrição de peso, nada impede o algoritmo de simplesmente pegar todos os itens pra maximizar valor. 
+Nesse caso, o torneio passaria a favorecer indivíduos inválidos só porque eles têm valor bruto alto, e o AG convergiria pra uma solução que não respeita a restrição do problema real,
+ou seja, ele otimizaria a função errada.
+Ao zerar o fitness de qualquer indivíduo que ultrapasse max_weight, a penalização faz com que esses indivíduos percam sistematicamente os torneios de seleção contra qualquer solução factível (mesmo uma factível fraca,
+com fitness baixo, ainda vence uma infactível com fitness 0). Isso empurra a pressão seletiva inteira do algoritmo na direção do espaço de soluções válidas,
+é o mecanismo que faz a restrição "peso ≤ 15" deixar de ser só uma regra escrita no papel e passar a influenciar de fato quem sobrevive e se reproduz geração após geração.
+Sem essa penalização, a restrição existiria só na definição do problema, mas nunca seria respeitada pela busca evolutiva.
