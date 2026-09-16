@@ -1,0 +1,95 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNeQzMC6fy72PCA3mklUfQk",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/RafaDelgadoDev/CIAO_LR_2026/blob/main/AULA_7_Exerc%C3%ADcio_3\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import numpy as np\n",
+        "# Função de Custo Esférica (Queremos encontrar o mínimo em x=0, y=0)\n",
+        "def fitness_function(position):\n",
+        "    return np.sum(position**2)\n",
+        "\n",
+        "num_particles = 10\n",
+        "dimensions = 2\n",
+        "max_iter = 15\n",
+        "\n",
+        "# Inicialização de Posições e Velocidades\n",
+        "X = np.random.uniform(-5, 5, (num_particles, dimensions))\n",
+        "V = np.random.uniform(-1, 1, (num_particles, dimensions))\n",
+        "\n",
+        "pbest_X = np.copy(X)\n",
+        "pbest_fitness = np.array([fitness_function(p) for p in pbest_X])\n",
+        "\n",
+        "gbest_index = np.argmin(pbest_fitness)\n",
+        "gbest_X = np.copy(pbest_X[gbest_index])\n",
+        "\n",
+        "w = 0.5   # Inércia\n",
+        "c1 = 1.5  # Componente Cognitiva (Individual)\n",
+        "c2 = 1.5  # Componente Social (Coletiva)\n",
+        "\n",
+        "for t in range(max_iter):\n",
+        "    for i in range(num_particles):\n",
+        "        r1, r2 = np.random.rand(), np.random.rand()\n",
+        "\n",
+        "        # Equação de atualização da velocidade\n",
+        "        V[i] = (w * V[i]) + (c1 * r1 * (pbest_X[i] - X[i])) + (c2 * r2 * (gbest_X - X[i]))\n",
+        "\n",
+        "        # Atualização da posição\n",
+        "        X[i] = X[i] + V[i]\n",
+        "\n",
+        "        # Avaliação de Fitness\n",
+        "        current_fitness = fitness_function(X[i])\n",
+        "        if current_fitness < pbest_fitness[i]:\n",
+        "            pbest_fitness[i] = current_fitness\n",
+        "            pbest_X[i] = X[i]\n",
+        "\n",
+        "            if current_fitness < fitness_function(gbest_X):\n",
+        "                gbest_X = np.copy(X[i])  # <-- CORREÇÃO: copiar, não apenas referenciar\n",
+        "\n",
+        "print(f\"[LAB 03] Melhor posição encontrada pelo Enxame (gbest): {gbest_X}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "UKwJyWB7oSSz",
+        "outputId": "201951cd-8e5c-49dd-8076-41fcf6d2d6fa"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[LAB 03] Melhor posição encontrada pelo Enxame (gbest): [ 0.00547573 -0.00547804]\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
