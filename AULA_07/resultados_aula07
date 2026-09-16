@@ -1,4 +1,4 @@
-Lab1
+LAB1
 Questão 1 — Como a busca local 2-opt afeta o equilíbrio entre Exploration e Exploitation?
 
 A busca local 2-opt desloca fortemente o equilíbrio na direção da exploitation (refino/intensificação). 
@@ -21,7 +21,7 @@ Rodei essa variação e o efeito é claro: o feromônio nunca é "esquecido", s�
 o feromônio das arestas boas cresce monotonicamente a cada iteração — no teste, o valor máximo de feromônio foi de ~1.1 na iteração 0 até quase 6.0 na iteração 49,
 crescendo de forma praticamente linear e sem limite superior.
 
-Lab2
+LAB2
 
 Geração  0 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
 Geração  1 | Melhor fitness: 15 | Indivíduo: [0 1 1 1 1]
@@ -63,3 +63,35 @@ Ao zerar o fitness de qualquer indivíduo que ultrapasse max_weight, a penaliza�
 com fitness baixo, ainda vence uma infactível com fitness 0). Isso empurra a pressão seletiva inteira do algoritmo na direção do espaço de soluções válidas,
 é o mecanismo que faz a restrição "peso ≤ 15" deixar de ser só uma regra escrita no papel e passar a influenciar de fato quem sobrevive e se reproduz geração após geração.
 Sem essa penalização, a restrição existiria só na definição do problema, mas nunca seria respeitada pela busca evolutiva.
+
+
+LAB3
+
+Questão 1
+O que acontece com c1 = 0 (componente cognitiva zerada)?
+Com c1 = 0, o termo c1 * r1 * (pbest_X[i] - X[i]) desaparece da equação de velocidade 
+a partícula para de ser "puxada" pela sua própria melhor posição já encontrada (pbest) e passa a ser guiada exclusivamente pelo termo social (c2 * r2 * (gbest_X - X[i])), ou seja,
+só pelo melhor ponto encontrado pelo enxame inteiro.
+
+Na prática, isso significa que cada partícula perde a "memória individual" — ela não tenta mais voltar/refinar em torno do melhor lugar que ela mesma já visitou,
+e todas as partículas passam a convergir só na direção do gbest atual, como se o enxame virasse uma "mente única" em vez de vários exploradores independentes. Isso tende a:
+
+Acelerar a convergência inicial (todo mundo mira o mesmo ponto), mas
+Reduzir a diversidade de busca e aumentar o risco de convergência prematura: se o gbest atual não for perto do ótimo global (comum em funções com múltiplos mínimos), o enxame inteiro se aglomera em torno dele sem ninguém "questionar" essa direção com base na própria experiência — perde-se a capacidade de correção individual que normalmente ajuda a escapar de mínimos locais.
+
+Questão 2 Função do parâmetro de Inércia (w)
+
+w controla quanto da velocidade anterior a partícula mantém de uma iteração pra outra — é o parâmetro que regula o equilíbrio entre exploration (varrer o espaço, "voar" mais longe)
+e exploitation (freiar e convergir perto dos atratores pbest/gbest). Testei 4 valores diferentes e o padrão fica bem claro:
+
+w	Fitness final do gbest	Dispersão final do enxame
+0.1	~0.0000	praticamente zero (enxame todo colapsado)
+0.5 (original)	0.000226	baixa
+0.9	0.0047	alta
+1.5	0.387	~100 (enxame "explodiu")
+w baixo (0.1): a velocidade anterior quase não conta, a partícula "freia" rápido e converge rapidinho pra perto de pbest/gbest — boa exploitation, mas com risco de convergir cedo demais (pouca exploração) se o gbest inicial não for próximo do ótimo real.
+w alto (1.5): a partícula carrega quase toda a velocidade da iteração anterior, então os deslocamentos vão ficando cada vez maiores em vez de se estabilizar — no teste, a dispersão do enxame disparou pra ~100 depois de partir de um intervalo de [-5,5], ou seja, o enxame literalmente "voou pra longe" da região de interesse em vez de convergir. É um sintoma de instabilidade/divergência — inércia alta demais atrapalha a exploitation a ponto de o algoritmo nunca se estabilizar.
+
+Ou seja, w é o "controle de amortecimento" do enxame: baixo demais mata a exploração (converge rápido, mas pode ser pra um mínimo local ruim); alto demais impede completamente a convergência
+(o enxame nunca "assenta"). É por isso que muitas implementações de PSO usam w decrescente ao longo das iterações — começa alto (mais exploração no início) e vai diminuindo
+(mais exploitation no fim, pra refinar a solução).
