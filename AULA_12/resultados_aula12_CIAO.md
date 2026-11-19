@@ -1,6 +1,4 @@
-# Resultados - Aula 12: Otimizacao Multiobjetivo e NSGA-II (Sprint 1 da AC-4)
 
-## Instalacao
 ## Exercicio 1 - Compra de Servidores Cloud
 
 **Objetivo:** Fronteira de Pareto simples com 2 objetivos opostos (Custo vs Latencia).
@@ -18,7 +16,7 @@
 
 **Interpretacao:** quanto mais vCPUs alocadas, menor a latencia, porem maior o custo - confirma o trade-off esperado entre as duas pontas (barato/lento vs caro/rapido).
 
-![Fronteira Exercicio 1](results/exercicio1_pareto.png)
+![Fronteira Exercicio 1](Imagens_Resultado/exercicio1_pareto.png)
 
 ---
 
@@ -62,7 +60,7 @@
 
 **Interpretacao:** maior velocidade reduz o tempo de entrega, mas aumenta custo e emissao de CO2 simultaneamente - fronteira tridimensional confirmando o trade-off entre as 3 dimensoes.
 
-![Fronteira Exercicio 3](results/exercicio3_pareto3d.png)
+![Fronteira Exercicio 3](Imagens_Resultado/exercicio3_pareto3d.png)
 
 ---
 
@@ -87,7 +85,7 @@
 
 **Interpretacao:** alocar mais em renda fixa reduz risco e retorno; alocar mais em acoes aumenta ambos. Fronteira de Pareto classica do dilema risco/retorno.
 
-![Fronteira Exercicio 4](results/exercicio4_pareto.png)
+![Fronteira Exercicio 4](Imagens_Resultado/exercicio4_pareto.png)
 
 ---
 
@@ -108,7 +106,7 @@
 
 **Interpretacao:** modelos mais profundos/com mais estimadores reduzem o erro de predicao, mas aumentam o tempo de inferencia - trade-off classico entre precisao e complexidade computacional.
 
-![Fronteira Exercicio 5](results/exercicio5_pareto.png)
+![Fronteira Exercicio 5](Imagens_Resultado/exercicio5_pareto.png)
 
 ---
 
@@ -135,7 +133,7 @@
 
 **Interpretacao:** recarga rapida (alta potencia) aproxima o desgaste do limite de seguranca (1500); recarga lenta preserva a bateria. Todas as solucoes encontradas respeitaram a restricao.
 
-![Fronteira Exercicio 6](results/exercicio6_pareto.png)
+![Fronteira Exercicio 6](Imagens_Resultado/exercicio6_pareto.png)
 
 ---
 
@@ -162,7 +160,7 @@
 
 **Interpretacao:** a Solucao A favorece investimento minimo, mas com operacao lenta; a Solucao B exige investimento alto em frota e velocidade para maximizar a eficiencia operacional; a Solucao C representa um equilibrio pratico entre os dois extremos. A empresa escolheria conforme sua prioridade orcamentaria versus necessidade de giro operacional.
 
-![Fronteira Exercicio 7](results/exercicio7_pareto.png)
+![Fronteira Exercicio 7](Imagens_Resultado/exercicio7_pareto.png)
 
 ---
 
